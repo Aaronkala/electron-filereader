@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
-import FileSelector from './components/fileSelector'
+import React, { Component } from 'react'
+import Train from './train'
 
 class App extends Component {
   render() {
     return (
       <div>
-        <FileSelector />
+        <Train />
       </div>
-    );
+    )
   }
 }
 
-export default App;
+export default App
