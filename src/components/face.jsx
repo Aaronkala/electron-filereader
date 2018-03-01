@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import { view } from 'react-easy-state'
+
+import ImageStore from '../stores/imagestore'
 
 const fs = window.require('electron').remote.require('fs')
 
@@ -17,7 +20,6 @@ export default class Face extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      deleted: false,
       name: '',
     }
     this.removeImage = this.removeImage.bind(this)
@@ -29,10 +31,7 @@ export default class Face extends Component {
   removeImage(name) {
     fs.unlink(`./public/images/${name}`, err => {
       if (err) throw err
-      console.log(`${name} was deleted`)
-      this.setState({
-        deleted: true,
-      })
+      ImageStore.removeUncat(name)
     })
   }
 

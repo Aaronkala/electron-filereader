@@ -1,9 +1,13 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import { view } from 'react-easy-state'
+
 import FileSelector from '../components/fileSelector'
 import Container from '../components/container'
 import { saveFace } from '../face-detection/tools'
 import Face from '../components/face'
+import People from './people'
+import ImageStore from '../stores/imagestore'
 
 const fs = window.require('electron').remote.require('fs')
 const path = window.require('path')
@@ -13,7 +17,7 @@ const ImageGrid = styled.div`
   flex-wrap: wrap;
 `
 
-export default class Train extends Component {
+class Train extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -25,7 +29,7 @@ export default class Train extends Component {
   selectedFile(data) {
     data.map(single => {
       const loc = path.parse(single)
-      saveFace(single, `public/images/${loc.name}`, loc.ext)
+      return saveFace(single, `public/images/${loc.name}`, loc.ext)
     })
     this.refreshFaces()
   }
@@ -33,13 +37,12 @@ export default class Train extends Component {
   refreshFaces() {
     fs.readdir('./public/images', (err, files) => {
       const res = files.filter(single => path.extname(single) !== '')
-      this.setState({
-        image: res,
-      })
+      ImageStore.setUncat(res)
     })
   }
 
   render() {
+    console.log(ImageStore.uncat)
     return (
       <div>
         <Container>
@@ -52,13 +55,16 @@ export default class Train extends Component {
             Select image
           </FileSelector>
           <ImageGrid>
-            {this.state.image[0] &&
-              this.state.image.map((single, i) => (
+            {ImageStore.uncat[0] &&
+              ImageStore.uncat.map((single, i) => (
                 <Face key={`${single}-${i}`} item={single} />
               ))}
           </ImageGrid>
         </Container>
+        <People />
       </div>
     )
   }
 }
+
+export default view(Train)
