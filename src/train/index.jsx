@@ -6,7 +6,6 @@ import FileSelector from '../components/fileSelector'
 import Container from '../components/container'
 import { saveFace } from '../face-detection/tools'
 import Face from '../components/face'
-import People from './people'
 import ImageStore from '../stores/imagestore'
 
 const fs = window.require('electron').remote.require('fs')
@@ -34,6 +33,10 @@ class Train extends Component {
     this.refreshFaces()
   }
 
+  componentWillMount() {
+    this.refreshFaces()
+  }
+
   refreshFaces() {
     fs.readdir('./public/images', (err, files) => {
       const res = files.filter(single => path.extname(single) !== '')
@@ -42,7 +45,6 @@ class Train extends Component {
   }
 
   render() {
-    console.log(ImageStore.uncat)
     return (
       <div>
         <Container>
@@ -61,7 +63,6 @@ class Train extends Component {
               ))}
           </ImageGrid>
         </Container>
-        <People />
       </div>
     )
   }
