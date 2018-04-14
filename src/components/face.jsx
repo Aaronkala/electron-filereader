@@ -7,13 +7,20 @@ import ImageStore from '../stores/imagestore'
 const fs = window.require('electron').remote.require('fs')
 
 const Img = styled.img`
-  height: 5em;
-  width: 5em;
+  width: 100%;
 `
 
 const Flex = styled.div`
   display: flex;
   flex-direction: column;
+  padding: 3px;
+`
+
+const Container = styled.div`
+  padding: 0;
+  margin: 5px;
+  border: 1px solid black;
+  width: 8em;
 `
 
 export default class Face extends Component {
@@ -52,7 +59,8 @@ export default class Face extends Component {
   render() {
     if (!this.state.deleted) {
       return (
-        <Flex key={`${this.props.item}`}>
+        <Container key={`${this.props.item}`}>
+          <Img src={`./images/${this.props.item}`} alt="selected" />
           <Flex>
             <input
               onChange={e => this.handleChange(e)}
@@ -67,8 +75,7 @@ export default class Face extends Component {
               </button>
             </div>
           </Flex>
-          <Img src={`./images/${this.props.item}`} alt="selected" />
-        </Flex>
+        </Container>
       )
     }
     return null
